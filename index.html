@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300&display=swap" rel="stylesheet">
+    <title>wurld</title>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300&family=Crimson+Pro:wght@200&display=swap" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -13,8 +13,8 @@
         }
         body {
             min-height: 100vh;
-            background: #faf8f6;
-            color: #222;
+            background: #f7f7f7;
+            color: #333;
             font-family: 'Zen Kaku Gothic New', sans-serif;
             display: flex;
             flex-direction: column;
@@ -23,72 +23,95 @@
             position: relative;
             overflow: hidden;
         }
-        .mist {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
+        .mountain {
+            position: fixed;
+            bottom: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(transparent 50%, #e6e6e6 100%);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
             z-index: 0;
+            opacity: 0.5;
         }
         .circle {
-            width: 80px;
-            height: 80px;
-            background: rgba(224,224,224,0.7);
+            width: 120px;
+            height: 120px;
+            background: rgba(224,224,224,0.3);
+            border: 1px solid rgba(0,0,0,0.1);
             border-radius: 50%;
-            margin-bottom: 32px;
+            margin-bottom: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            color: #b0a695;
+            font-size: 3rem;
+            color: #666;
             letter-spacing: 0.1em;
             font-weight: 300;
-            transition: transform 0.3s;
+            transition: all 0.6s ease;
             cursor: pointer;
             z-index: 1;
+            backdrop-filter: blur(8px);
         }
         .circle:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(8deg);
+            background: rgba(224,224,224,0.5);
+            color: #333;
         }
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 300;
-            margin: 0 0 12px 0;
-            letter-spacing: 0.12em;
-            transition: letter-spacing 0.3s;
+            margin: 0 0 16px 0;
+            letter-spacing: 0.25em;
+            transition: all 0.6s ease;
             z-index: 1;
+            position: relative;
+            overflow: hidden;
         }
-        h1:hover {
-            letter-spacing: 0.2em;
+        h1:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #333;
+            transition: width 0.6s ease;
+        }
+        h1:hover:after {
+            width: 100%;
         }
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #888;
-            margin-bottom: 40px;
-            letter-spacing: 0.07em;
+            margin-bottom: 48px;
+            letter-spacing: 0.2em;
             font-weight: 300;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 1.2s ease-out forwards;
             z-index: 1;
         }
         .btn {
-            padding: 12px 32px;
-            background: rgba(255,255,255,0.85);
-            border: 1px solid #e0e0e0;
-            border-radius: 24px;
-            font-size: 1rem;
-            color: #222;
+            padding: 16px 40px;
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: #666;
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.4s ease;
+            letter-spacing: 0.15em;
             font-weight: 300;
             z-index: 1;
+            backdrop-filter: blur(4px);
         }
         .btn:hover {
-            background: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            color: #333;
         }
         @keyframes fadeIn {
             to {
@@ -96,17 +119,24 @@
                 transform: translateY(0);
             }
         }
+        .mist {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
     </style>
 </head>
 <body>
+    <div class="mountain"></div>
     <canvas class="mist"></canvas>
-    <div class="circle" onclick="this.textContent = '和'"></div>
-    <h1>hellu wurld</h1>
-    <div class="subtitle">minimulism</div>
-    <a href="#" class="btn" id="learnBtn">Learn</a>
+    <div class="circle" onclick="this.innerHTML = ['山', '川', '空'][Math.floor(Math.random()*3)]"></div>
+    <h1>こんにちは世界</h1>
+    <div class="subtitle">hello world</div>
+    <a href="#" class="btn" id="learnBtn">Journey Begin</a>
 
     <script>
-        // Misty background effect
         const canvas = document.querySelector('.mist');
         const ctx = canvas.getContext('2d');
         let w, h;
@@ -118,12 +148,13 @@
         window.addEventListener('resize', resize);
         resize();
 
-        const particles = Array.from({length: 20}, () => ({
+        const particles = Array.from({length: 30}, () => ({
             x: Math.random() * w,
             y: Math.random() * h,
-            radius: 100 + Math.random() * 100,
-            speed: 0.2 + Math.random() * 0.3,
-            angle: Math.random() * Math.PI * 2
+            radius: 150 + Math.random() * 150,
+            speed: 0.1 + Math.random() * 0.2,
+            angle: Math.random() * Math.PI * 2,
+            opacity: 0.05 + Math.random() * 0.05
         }));
 
         function animate() {
@@ -138,7 +169,7 @@
                 if (p.y > h + p.radius) p.y = -p.radius;
 
                 const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
-                gradient.addColorStop(0, 'rgba(255,255,255,0.1)');
+                gradient.addColorStop(0, `rgba(255,255,255,${p.opacity})`);
                 gradient.addColorStop(1, 'rgba(255,255,255,0)');
                 
                 ctx.fillStyle = gradient;
@@ -150,11 +181,16 @@
         }
         animate();
 
-        // Interactive button
         document.getElementById('learnBtn').addEventListener('click', (e) => {
             e.preventDefault();
-            e.target.textContent = '学ぶ';
-            setTimeout(() => e.target.textContent = 'Learn', 1000);
+            e.target.textContent = '始める';
+            setTimeout(() => {
+                e.target.style.transform = 'translateY(-2px) scale(1.05)';
+                setTimeout(() => {
+                    e.target.textContent = 'Journey Begin';
+                    e.target.style.transform = '';
+                }, 1000);
+            }, 100);
         });
     </script>
 </body>
